@@ -1,22 +1,21 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import datetime
+import seaborn as sns
 import os
 from google.colab import drive
-import json
-!pip install pdfminer
 !pip install PyPDF2
-import pdfminer
 import PyPDF2
 from PyPDF2 import PdfFileReader
-from pdfminer.layout import LAParams
-from pdfminer.pdfpage import PDFPage
 from io import StringIO
-import PyPDF2
 
-# setting Google drive directory
 drive.mount('/content/drive')
-path = 'Energy Moonshot AI/TextExtract/raw_file'
-os.chdir(os.path.join('/content/drive/My Drive', path))
+path_base = 'Energy Moonshot AI/TextExtract'
+path_rawfile = '/raw_file'
+path_cleanfile = '/cleaned_file'
+os.chdir(os.path.join('/content/drive/My Drive', path_base + path_rawfile))
 
 def clean_text(text):
   return text.replace('[^\w\s]',' ')\
@@ -24,11 +23,19 @@ def clean_text(text):
   .replace('\u2026',' ')\
   .replace('\n',' ')
 
+def file_check(file):
+  size = os.path.getsize(file)
+  if size < 1024:
+    print("File size is too small")  
+    return False 
+
 def text_extract(file_name,
                  detail = False,
                  page_info = False,
                  save= False,
                  save_file_name = False):
+  # check
+  file_check(file_name)
   reader = PyPDF2.PdfReader(file_name)
   empty_text=[]
   for page in reader.pages:
@@ -42,6 +49,7 @@ def text_extract(file_name,
   if save is True:
     with open(save_file_name, 'w') as txtfile:
       json.dump(empty_text, txtfile)
+
   return(empty_text)
 
 all_text = {'index':[], 'file_name':[] , 'text':[] }
@@ -67,6 +75,7 @@ if __name__ == "__main__":
       print("file", index, "processed")
 
   if save_all_file is True:
+    os.chdir(os.path.join('/content/drive/My Drive', path_base + path_cleanfile))
     with open("all_text.txt", 'w') as txtfile:
       json.dump(all_text, txtfile)
       print("saving complete")
