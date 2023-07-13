@@ -1,23 +1,11 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
-import datetime
-import seaborn as sns
-import os
 from google.colab import drive
-!pip install pdfminer
 !pip install PyPDF2
 import pdfminer
 import PyPDF2
 from PyPDF2 import PdfFileReader
-#from pdfminer.high_level import extract_text
-from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
-from pdfminer.converter import TextConverter
-from pdfminer.layout import LAParams
-from pdfminer.pdfpage import PDFPage
 from io import StringIO
-import PyPDF2
 import requests
 import urllib
 import urllib.request
@@ -25,10 +13,8 @@ import os
 import os.path
 import time
 from urllib.parse import urljoin
-import urllib.request
 !pip install validators
 import validators
-
 
 drive.mount('/content/drive')
 path_base = 'Energy Moonshot AI/TextExtract'
